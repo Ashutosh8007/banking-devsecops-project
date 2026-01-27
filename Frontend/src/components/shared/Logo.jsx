@@ -1,4 +1,3 @@
-import React from "react";
 import { FcLightAtTheEndOfTunnel } from "react-icons/fc";
 
 export const Logo = ({ textSize = null, bg = true }) => {
@@ -12,7 +11,7 @@ export const Logo = ({ textSize = null, bg = true }) => {
       <span
         className={`${
           textSize ? textSize : "text-3xl"
-        } p-1  text-blue-800 font-bold `}
+        } p-1  text-blue-800 font-bold truncate`}
       >
         E-BANK
       </span>

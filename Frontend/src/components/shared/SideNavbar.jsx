@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { BiMenu } from "react-icons/bi";
 import { TiDelete } from "react-icons/ti";
 import { AiFillHeart } from "react-icons/ai";
@@ -61,11 +61,9 @@ export const SideNavbar = ({ admin = null, user = null }) => {
 
   return (
     <>
-      {/* Sidebar starts */}
-
       {/* Tablet/desktop Sidebar*/}
-      <div className="w-64 absolute sm:relative bg-slate-50 shadow-lg flex-col justify-between hidden lg:flex ">
-        <div className="h-screen overflow-y-auto px-8 py-8 sticky top-0 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-400">
+      <div className="w-72 absolute sm:relative bg-slate-50 shadow-lg flex-col justify-between hidden lg:flex ">
+        <div className="h-screen overflow-y-auto px-3 py-6 sticky top-0 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-400">
           {/* Logo */}
           <Logo />
 
@@ -80,7 +78,7 @@ export const SideNavbar = ({ admin = null, user = null }) => {
           </div>
 
           {/* Links */}
-          <ul className="mt-12">
+          <ul className="my-12">
             {admin && <AdminNavLinks admin={admin} />}
             {user && <UserNavLinks user={user} />}
           </ul>
@@ -106,7 +104,7 @@ export const SideNavbar = ({ admin = null, user = null }) => {
         </div>
         <div
           className="
-            h-screen overflow-y-auto px-8 py-8 sticky top-0 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-400"
+            h-screen overflow-y-auto px-3 py-6 sticky top-0 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-400"
         >
           {/* Logo */}
           <Logo />
@@ -128,8 +126,6 @@ export const SideNavbar = ({ admin = null, user = null }) => {
           </ul>
         </div>
       </div>
-
-      {/* Sidebar ends */}
     </>
   );
 };
