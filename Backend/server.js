@@ -11,6 +11,9 @@ const { connectToMongoose } = require("./config/db");
 //middlewares
 //express json parser middleware
 app.use(express.json());
+//sanitize user input against NoSQL injection
+const mongoSanitize = require("express-mongo-sanitize");
+app.use(mongoSanitize());
 
 //cors middleware
 const { corsProOptions } = require("./config/corsConfig");
