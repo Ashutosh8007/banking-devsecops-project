@@ -60,4 +60,32 @@ describe("createFirstAdmin (owner bootstrap)", () => {
     expect(Admin.create).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(201);
   });
+
+
+  it("returns 400 when Admin.create fails with a validation-related error", async () => {
+    process.env.ALLOW_OWNER_BOOTSTRAP = "true";
+    const req = { body: { name: "Owner", email: "bad", password: "secret123" } };
+    const res = mockRes();
+
+    bcrypt.hash.mockResolvedValue("hashedpassword");
+    Admin.create.mockRejectedValue(new Error("email is invalid"));
+
+    await createFirstAdmin(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it("returns 500 on an unexpected error", async () => {
+    process.env.ALLOW_OWNER_BOOTSTRAP = "true";
+    const req = { body: { name: "Owner", email: "owner@example.com", password: "secret123" } };
+    const res = mockRes();
+
+    bcrypt.hash.mockResolvedValue("hashedpassword");
+    Admin.create.mockRejectedValue(new Error("database connection lost"));
+
+    await createFirstAdmin(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+  });
+
 });
