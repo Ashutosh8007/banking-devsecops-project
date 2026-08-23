@@ -7,7 +7,7 @@ they were addressed as part of this project's DevSecOps process.
 
 **Severity:** Critical
 **Component:** Backend — `api/admins/owner/create`
-**Status:** Open (remediation planned)
+**Status:** Resolved — endpoint now gated behind `ALLOW_OWNER_BOOTSTRAP` environment flag (default `false`). See `Backend/controllers/adminsControllers.js` and `Backend/.env.example`.
 
 ### Description
 The base application ships with a publicly accessible, unauthenticated API
