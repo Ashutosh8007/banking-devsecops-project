@@ -48,7 +48,7 @@ router
   .route("/owner/:id")
   .put(authAdminProtect, checkPassword, validatePassword, updateOwner);
 
-//Comment/Remove This Route after creating the first owner
-// router.route("/owner/create").post(createFirstAdmin);
+// SECURITY: route is gated by ALLOW_OWNER_BOOTSTRAP env var (see controller)
+router.route("/owner/create").post(createFirstAdmin); // gated by ALLOW_OWNER_BOOTSTRAP env var
 
 module.exports = router;
