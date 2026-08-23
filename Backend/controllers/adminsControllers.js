@@ -230,7 +230,7 @@ module.exports = {
   getAdmins,
   getOneAdmin,
   createAdmin,
-  // createFirstAdmin,
+  createFirstAdmin,
   adminLogin,
   updateAdmin,
   updateOwner,
