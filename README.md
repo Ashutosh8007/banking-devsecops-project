@@ -1,3 +1,44 @@
+# Banking DevSecOps Pipeline
+
+A full DevSecOps CI/CD pipeline built around a MERN-stack banking (fintech-style)
+application — covering secure build, automated vulnerability scanning, GitOps
+deployment, monitoring, and AI-assisted operations.
+
+This project demonstrates an end-to-end, security-first delivery pipeline for a
+financial application, from code commit to production monitoring.
+
+## Tech Stack
+
+**Application:** React, Node.js/Express, MongoDB (JWT auth, role-based access)
+**CI/CD:** GitHub Actions
+**Containerization:** Docker, Docker Hub
+**Security:** Trivy (container scanning), OWASP Dependency-Check, SonarCloud
+**Orchestration:** Kubernetes (k3s), Helm
+**GitOps:** ArgoCD
+**Monitoring:** Prometheus, Grafana, ELK Stack
+**Infrastructure:** AWS EC2
+**AI Agents:** LangChain + Ollama — Security Triage, Deployment Gatekeeper,
+Transaction Anomaly Detection, Incident Monitoring, ChatOps
+
+## Architecture
+
+See [docs/architecture.md](docs/architecture.md) for the full system design and
+diagrams.
+
+## Security Notes
+
+This project treats security as a first-class concern — see
+[docs/security-findings.md](docs/security-findings.md) for identified and
+remediated vulnerabilities, including hardening applied to the base application.
+
+## Base Application
+
+The banking application itself is based on
+[Sprints-MERN-E-Banking-System](https://github.com/mostafakamal22/Sprints-MERN-E-Banking-System)
+by mostafakamal22, extended here with a full DevSecOps delivery pipeline.
+
+---
+
 <h1 id="title" align="center">Sprints-MERN-E-Banking-System</h1>
 
 <p align="center"><img src="https://socialify.git.ci/mostafakamal22/Sprints-MERN-E-Banking-System/image?font=Bitter&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Charlie%20Brown&amp;stargazers=1&amp;theme=Auto" alt="project-image"></p>
