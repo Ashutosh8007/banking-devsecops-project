@@ -80,7 +80,7 @@ const userLogin = async (req, res) => {
   const { email, password } = req.body;
   let user;
   try {
-    user = await User.findOne({ email });
+    user = await User.findOne({ email: String(email) });
     //ckeck for password
     const isCorrectPassword = await bcrypt.compare(password, user.password);
 

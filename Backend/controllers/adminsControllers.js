@@ -43,7 +43,7 @@ const adminLogin = async (req, res) => {
   const { email, password } = req.body;
   let admin;
   try {
-    admin = await Admin.findOne({ email });
+    admin = await Admin.findOne({ email: String(email) });
     //check for password
     const isCorrectPassword = await bcrypt.compare(password, admin.password);
     if (isCorrectPassword) {
