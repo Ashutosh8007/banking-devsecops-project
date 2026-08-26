@@ -1,5 +1,31 @@
-node_modules
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+.terraform.lock.hcl
 
+# SSH keys
+ssh-keys/
+*.pem
+
+# OS/editor
+.DS_Store
+.vscode/
+*.swp
+
+# Env/secrets
 .env
+*.env
 
-/Backend/routesTesting
+# Node
+node_modules/
+coverage/
+npm-debug.log*
+
+# Build
+dist/
+build/
