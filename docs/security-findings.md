@@ -44,3 +44,36 @@ access to the banking system.
 
 Findings from automated scans will be appended to this document as they are
 triaged.
+
+## Finding 2: Dependency Vulnerabilities (Trivy Scan)
+
+**Severity:** Critical/High (multiple)
+**Component:** Backend — npm dependencies
+**Status:** Resolved via `package.json` `overrides`
+
+### Description
+Trivy scanning of the backend Docker image surfaced multiple CVEs in both
+direct and transitive dependencies, including:
+- `mongoose@6.13.8` — NoSQL injection via `$nor` sanitization bypass, fixed in `6.13.10`
+- `fast-xml-parser` (transitive via AWS SDK/mongodb) — multiple CVEs including
+  critical XSS (CVE-2026-25896) and DoS via entity expansion, fixed in `5.11.1`
+- `qs` (transitive via express/body-parser) — DoS via array limit bypass, fixed in `6.15.3`
+- `body-parser` — DoS via silently disabled size limits, fixed in `1.20.6`
+- `ip-address` (transitive via mongodb/socks) — SSRF and XSS, fixed in `10.3.1`
+- `lodash` — arbitrary code execution via `_.template`, fixed in `4.18.1`
+  (note: `4.18.0` was an incomplete/deprecated fix attempt)
+
+### Remediation
+Used npm `overrides` in `package.json` to force patched versions across
+transitive dependency chains that could not be fixed via direct `npm install`
+alone (dependencies nested several levels deep inside `@aws-sdk/*` and
+`express` sub-dependencies).
+
+### Accepted Risk — Development Dependencies
+The following remain flagged by `npm audit` but are confirmed to exist only
+in `devDependencies` (jest, nodemon, concurrently) and are excluded from the
+production Docker image via `npm ci --omit=dev`:
+- `brace-expansion`, `minimatch`, `picomatch` — via jest/nodemon glob chains
+- `shell-quote` — via concurrently (local dev script runner only)
+
+These pose no production risk since they never enter the runtime container.
