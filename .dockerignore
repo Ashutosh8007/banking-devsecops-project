@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+coverage
+.git
+.env
+.env.*
+!.env.example
+infra
+ssh-keys
+docs
+k8s
+agents
+Frontend/node_modules
+Frontend/dist
