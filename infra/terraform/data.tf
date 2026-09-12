@@ -1,16 +1,16 @@
-# Dynamically fetch the latest Ubuntu 22.04 LTS AMI for the configured region
+# Pinned Ubuntu 22.04 LTS AMI - intentionally NOT using most_recent=true.
+# Using "latest" causes Terraform to replace all EC2 instances (destroying
+# data) whenever Canonical releases a new AMI build, even with no config
+# changes on our end. Pinning keeps infrastructure deterministic across time.
+# To intentionally upgrade the AMI, update this ID manually and expect
+# instance replacement.
 data "aws_ami" "ubuntu" {
-  most_recent = true
+  most_recent = false
   owners      = ["099720109477"] # Canonical's official AWS account ID
 
   filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    name   = "image-id"
+    values = ["ami-05a3e9423ae4d7a19"]
   }
 }
 
