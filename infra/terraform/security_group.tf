@@ -33,11 +33,18 @@ resource "aws_security_group" "banking_devsecops_sg" {
     protocol    = "tcp"
     cidr_blocks = [var.my_ip]
   }
+  ingress {
+    description = "k3s API server from within SG (for ArgoCD)"
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    self        = true
+  }
 
   ingress {
     description = "ArgoCD UI"
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 32085
+    to_port     = 32085
     protocol    = "tcp"
     cidr_blocks = [var.my_ip]
   }
