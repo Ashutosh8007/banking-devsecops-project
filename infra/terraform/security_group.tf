@@ -56,6 +56,20 @@ resource "aws_security_group" "banking_devsecops_sg" {
     protocol    = "tcp"
     cidr_blocks = [var.my_ip]
   }
+  ingress {
+    description = "Node exporter (app cluster metrics for Prometheus)"
+    from_port   = 30924
+    to_port     = 30924
+    protocol    = "tcp"
+    self        = true
+  }
+  ingress {
+    description = "Kube-state-metrics (app cluster metrics for Prometheus)"
+    from_port   = 30115
+    to_port     = 30115
+    protocol    = "tcp"
+    self        = true
+  }
 
   ingress {
     description = "Kibana"
