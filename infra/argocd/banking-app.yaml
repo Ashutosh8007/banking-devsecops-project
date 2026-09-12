@@ -10,7 +10,7 @@ spec:
     targetRevision: main
     path: k8s
   destination:
-    server: https://172.31.90.207:6443
+    server: https://172.31.86.209:6443
     namespace: banking
   syncPolicy:
     automated:
