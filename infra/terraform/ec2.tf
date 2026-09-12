@@ -42,7 +42,7 @@ resource "aws_instance" "argocd" {
 
 resource "aws_instance" "monitoring" {
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t3.small"
+  instance_type          = "t3.medium"
   key_name               = aws_key_pair.banking_devsecops_key.key_name
   vpc_security_group_ids = [aws_security_group.banking_devsecops_sg.id]
 
