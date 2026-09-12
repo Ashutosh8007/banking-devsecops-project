@@ -77,3 +77,43 @@ production Docker image via `npm ci --omit=dev`:
 - `shell-quote` — via concurrently (local dev script runner only)
 
 These pose no production risk since they never enter the runtime container.
+
+## Finding 3: Non-Deterministic Infrastructure via Unpinned AMI
+
+**Severity:** Medium
+**Component:** Terraform — `infra/terraform/data.tf`
+**Status:** Resolved — AMI pinned to a fixed image ID
+
+### Description
+The Terraform configuration used `most_recent = true` when looking up the
+base Ubuntu AMI for all EC2 instances. This meant the actual machine image
+underlying the infrastructure could silently change between `terraform apply`
+runs, entirely outside of version control and without an explicit, reviewed
+change to the repository.
+
+This is a configuration-drift and availability risk: a routine, unrelated
+`apply` (e.g. updating a security group rule) triggered forced replacement
+of all EC2 instances when a new AMI build became available upstream,
+causing full infrastructure teardown and rebuild.
+
+### Risk
+- Unplanned downtime triggered by an upstream third-party AMI release,
+  not by any intentional change in this project
+- Loss of instance-level state not otherwise captured in Git or Kubernetes
+  (e.g. any manual OS-level configuration outside of IaC)
+- Reduced auditability: "what image is actually running" was implicit and
+  time-dependent rather than an explicit, reviewable value
+
+### Remediation
+Pinned `data.aws_ami.ubuntu` to a specific AMI ID via an `image-id` filter,
+with `most_recent = false`. AMI upgrades are now a deliberate, explicit
+change to `data.tf`, reviewed like any other infrastructure change, rather
+than an implicit side effect of unrelated applies.
+
+### Mitigating Factor
+Because application state and configuration were fully defined in Git
+(Terraform, Kubernetes manifests, ArgoCD Application) rather than manually
+configured on the instances, the unplanned rebuild was fully recoverable
+within about an hour, with no loss of application code, configuration, or
+deployment history. This incident is a practical demonstration of why
+Infrastructure as Code and GitOps matter for resilience.
