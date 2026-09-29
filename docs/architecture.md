@@ -103,3 +103,40 @@ resources that cannot be updated in-place (AMIs, some AMI-like base images).
 Pin versions explicitly and upgrade on a deliberate schedule, treating the
 upgrade itself as a planned, reviewed change — not a side effect of an
 unrelated apply.
+
+## Monitoring Setup (Phase 4)
+
+### Stack
+- **kube-prometheus-stack** (Prometheus, Grafana, Alertmanager, node-exporter,
+  kube-state-metrics, Prometheus Operator) deployed via Helm on the
+  `prometheus-grafana` EC2 instance (resized from t3.small to t3.medium after
+  hitting memory exhaustion running the full stack on 2GB RAM).
+
+### Cross-Cluster Metrics
+The monitoring stack runs on its own dedicated k3s cluster, separate from the
+application cluster, per the documented architecture. To monitor the app
+cluster's resources:
+- `prometheus-node-exporter` and `kube-state-metrics` were installed directly
+  on the app cluster via Helm, each exposed via NodePort
+- Prometheus on the monitoring cluster scrapes these targets remotely using
+  `additionalScrapeConfigs`, referencing the app cluster's **private IP**
+  (cross-instance traffic within the same security group must use private
+  IPs, not public IPs — see security group `self` rules)
+- Confirmed both targets show `UP` in Prometheus's `/targets` page
+
+### Dashboards
+Two Grafana dashboards imported from Grafana.com, both showing live data
+from the app cluster:
+- **Node Exporter Full** (ID 1860) — node-level CPU, memory, disk, network
+- **kube-state-metrics-v2** (ID 13332) — cluster/pod/deployment-level
+  Kubernetes state, filtered by `cluster: k3s-app-cluster`
+
+### Known Operational Gotcha
+`kubectl patch svc ... -p '{"spec":{"type":"NodePort"}}'` applied manually
+does NOT survive a subsequent `helm upgrade --reuse-values`, since the patch
+isn't tracked as a Helm value. Any `helm upgrade` after a manual patch will
+reset the service back to the chart's default type, changing (or removing)
+the externally-accessible NodePort. Fix: set `service.type=NodePort` and an
+explicit `service.nodePort=<port>` via `--set` (or in values.yaml) so it's
+tracked by Helm and survives future upgrades. Applied this fix to
+`grafana.service.type` and `grafana.service.nodePort`.
