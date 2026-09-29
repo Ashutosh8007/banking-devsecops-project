@@ -51,8 +51,8 @@ resource "aws_security_group" "banking_devsecops_sg" {
 
   ingress {
     description = "Grafana"
-    from_port   = 32374
-    to_port     = 32374
+    from_port   = 32622
+    to_port     = 32622
     protocol    = "tcp"
     cidr_blocks = [var.my_ip]
   }
