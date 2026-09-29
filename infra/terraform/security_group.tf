@@ -57,6 +57,13 @@ resource "aws_security_group" "banking_devsecops_sg" {
     cidr_blocks = [var.my_ip]
   }
   ingress {
+    description = "Prometheus UI"
+    from_port   = 31156
+    to_port     = 31156
+    protocol    = "tcp"
+    cidr_blocks = [var.my_ip]
+  }
+  ingress {
     description = "Node exporter (app cluster metrics for Prometheus)"
     from_port   = 30924
     to_port     = 30924
